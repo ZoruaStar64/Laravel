@@ -20,7 +20,7 @@ Route::get('/weather', function () {
     $location = 'Lelystad';
     $units = 'metric';
     $cnt = '7';
-    $appid = 'aa92aac77c3a5120b9a48f8b388521ac';
+    $appid = config('services.openweather.key');
 
     $currentResponse = Http::get("http://api.openweathermap.org/data/2.5/weather?appid={$appid}&q={$location}&units={$units}");
     $futureResponse = Http::get("http://api.openweathermap.org/data/2.5/forecast/daily?appid={$appid}&q={$location}&units={$units}&cnt={$cnt}");
