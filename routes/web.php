@@ -17,7 +17,20 @@ Route::get('/', function () {
     return view('index');
 });
 Route::get('/weather', function () {
-    return view('weather');
+    $location = 'Lelystad';
+    $units = 'metric';
+    $cnt = '7';
+    $appid = 'aa92aac77c3a5120b9a48f8b388521ac';
+
+    $currentResponse = Http::get("http://api.openweathermap.org/data/2.5/weather?appid={$appid}&q={$location}&units={$units}");
+    $futureResponse = Http::get("http://api.openweathermap.org/data/2.5/forecast/daily?appid={$appid}&q={$location}&units={$units}&cnt={$cnt}");
+
+    dump($futureResponse->json());
+
+    return view('weather', [
+        'currentWeather' => $currentResponse->json(),
+        'futureWeather' => $futureResponse->json(),
+    ]);
 });
 
 Route::get('database', 'App\Http\Controllers\TodoController@index');

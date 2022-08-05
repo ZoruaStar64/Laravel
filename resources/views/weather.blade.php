@@ -2,10 +2,9 @@
 
 <!-- this causes the weather API page's body/main to appear -->
 @section('content')
-<div class="container flex mx-auto px-4 py-8 gap-6 text-white h-96">
-        <h1 class="text-4xl">This is the page for the Weather API</h1>
-        <p>This part of the page will be used to test if i can use a weather API.</p>
-    </div>
+<div class="container flex mx-auto px-4 py-8 gap-6 text-white h-fit">
+        <x-weather-widget :currentWeather="$currentWeather" :futureWeather="$futureWeather" />  
+</div>
 @endsection
 
 <!-- this causes the styling around the weather button link to appear once active -->
