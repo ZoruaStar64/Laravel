@@ -2,37 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use App\Models\Todo;
 
 class TodoController extends Controller
 {
     public function index(Todo $todo) {
-        $todo = Todo::all();
-        return view('database')->with('todos', $todo);
+        $allTodos = Todo::all();
+        $finishedTodos = $allTodos->filter(function($todo, $key) {
+            return $todo->checked == 1;
+        });
+        $unfinishedTodos =  $allTodos->filter(function($todo, $key) {
+            return $todo->checked == 0;
+        });
+        return view('database')->with('finishedTodos', $finishedTodos)->with('unfinishedTodos', $unfinishedTodos);
     }
 
     public function create() {
         return view('create');
     }
+
+
     public function store() {
         try {
-            $this->validate(request(), [
+           $data = $this->validate(request(), [
                 'name' => ['required'],
                 'category' => ['required'],
                 'description' => ['required']
             ]);
         } catch (ValidationException $e) {
-
+            return response()->json($e->errors());
         }
 
-        $data = request()->all();
-
-        $todo = new Todo();
-
-        $todo->name = $data['name'];
-        $todo->category = $data['category'];
-        $todo->description = $data['description'];
+        $todo = Todo::create($data);
         $todo->save();
 
         session()->flash('success', 'Todo created succesfully!');
@@ -51,20 +53,19 @@ class TodoController extends Controller
     public function update(Todo $todo) {
         
         try {
-            $this->validate(request(), [
+            $data = $this->validate(request(), [
                 'name' => ['required'],
                 'category' => ['required'],
                 'description' => ['required'],
             ]);
-        } catch (ValiditionException $e) {
-
+        } catch (ValidationException $e) {
+            return response()->json($e->errors());
         }
-
-        $data = request()->all();
 
         $todo->name = $data['name'];
         $todo->category = $data['category'];
         $todo->description = $data['description'];
+
         $todo->save();
 
         session()->flash('success', 'Todo updated succesfully!');
@@ -74,20 +75,15 @@ class TodoController extends Controller
 
     public function check(Todo $todo) {
         try {
-            $this->validate(request(), [
-                'checked' => ['required'],
+           $data = $this->validate(request(), [
+                'checked' => ['required', "numeric", "max:1"],
             ]);
-        } catch (ValiditionException $e) {
-
-        }
-        $data = request()->all();
-        if($data['checked'] == 0) {
-            $data['checked'] = 1;
-        } elseif($data['checked'] == 1) {
-            $data['checked'] = 0;
+        } catch (ValidationException $e) {
+            return response()->json($e->errors());
         }
 
-        $todo->checked = $data['checked'];
+
+        $todo->checked = (int)!$data['checked'];
         $todo->save();
 
         session()->flash('success', "Task succesfully checked/unchecked!");

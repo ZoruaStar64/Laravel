@@ -38,15 +38,15 @@ Route::get('database', 'App\Http\Controllers\TodoController@index');
 Route::get('create', 'App\Http\Controllers\TodoController@create');
 Route::post('store-data', 'App\Http\Controllers\TodoController@store');
 
-Route::get('details/{todo}', 'App\Http\Controllers\TodoController@details');
-
-Route::get('edit/{todo}', 'App\Http\Controllers\TodoController@edit');
-
-Route::post('update/{todo}', 'App\Http\Controllers\TodoController@update');
-
-Route::post('check/{todo}', 'App\Http\Controllers\TodoController@check');
-
-Route::get('delete/{todo}', 'App\Http\Controllers\TodoController@delete');
+// hier hebben we aangezeten
+Route::prefix('todos')->group(function () {
+    Route::get('{todo}', 'App\Http\Controllers\TodoController@details');
+    Route::get('{todo}/edit', 'App\Http\Controllers\TodoController@edit');
+    Route::post('{todo}', 'App\Http\Controllers\TodoController@update');
+    // !@#
+    Route::post('check/{todo}', 'App\Http\Controllers\TodoController@check');
+    Route::delete('{todo}', 'App\Http\Controllers\TodoController@delete');
+});
 
 Route::get('/create', function () {
     return view('create');

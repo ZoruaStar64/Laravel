@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container rounded-lg bg-slate-700 p-4 mx-auto my-14">
-    <form action="/update/{{$todos->id}}" method="post" class="mx-auto p-4">
+    <form action="/todos/{{$todos->id}}" method="post" class="mx-auto p-4">
         @csrf
         <div class="form-group m-3">
             <label class="text-white text-xl" for="name">Task Name</label>
