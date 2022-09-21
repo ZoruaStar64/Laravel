@@ -10,7 +10,6 @@
     <title>Laravel test object</title>
 </head>
 <body class="bg-gray-900">
-    
     <div class="flex justify-between container mx-auto my-8 px-4 py-8 bg-slate-700 relative">
 
         <div class="">
@@ -20,7 +19,7 @@
         <div class="text-white text-lg">
             <a class="mr-10 @yield('index-active') px-2 py-1 " href="{{url('/')}}">Home</a>
             <a class="mr-10 @yield('weather-active') px-2 py-1" href="{{url('/weather')}}">Weather</a>
-            <a class="mr-10 @yield('database-active') px-2 py-1" href="{{url('/database')}}">Database</a> <!-- iets qua een to-do lijst -->
+            <a class="mr-10 @yield('database-active') px-2 py-1" href="{{url('/todos')}}">Database</a> <!-- iets qua een to-do lijst -->
         </div>
 
     </div>

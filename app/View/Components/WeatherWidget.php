@@ -28,6 +28,6 @@ class WeatherWidget extends Component
      */
     public function render()
     {
-        return view('components.weather-widget');
+        return view('components.weather_widget');
     }
 }

@@ -16,7 +16,17 @@ class Todo extends Model
      */
     protected $fillable = [
         'name',
-        'category',
+        'categories_id',
         'description'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'categories_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withPivot('id', 'tag_id', 'todo_id');
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TodoController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,41 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
-Route::get('/weather', function () {
-    $location = 'Lelystad';
-    $units = 'metric';
-    $cnt = '7';
-    $appid = config('services.openweather.key');
+// This route is the home page of the website
+Route::view('/', 'index');
 
-    $currentResponse = Http::get("http://api.openweathermap.org/data/2.5/weather?appid={$appid}&q={$location}&units={$units}");
-    $futureResponse = Http::get("http://api.openweathermap.org/data/2.5/forecast/daily?appid={$appid}&q={$location}&units={$units}&cnt={$cnt}");
+// This route here directs to the Weather API page
+Route::get('/weather', [WeatherController::class, 'index']);
 
-    dump($futureResponse->json());
-
-    return view('weather', [
-        'currentWeather' => $currentResponse->json(),
-        'futureWeather' => $futureResponse->json(),
-    ]);
-});
-
-Route::get('database', 'App\Http\Controllers\TodoController@index');
-
-Route::get('create', 'App\Http\Controllers\TodoController@create');
-Route::post('store-data', 'App\Http\Controllers\TodoController@store');
-
-// hier hebben we aangezeten
+// All these routes are related to the Todos page
 Route::prefix('todos')->group(function () {
-    Route::get('{todo}', 'App\Http\Controllers\TodoController@details');
-    Route::get('{todo}/edit', 'App\Http\Controllers\TodoController@edit');
-    Route::post('{todo}', 'App\Http\Controllers\TodoController@update');
-    // !@#
-    Route::post('check/{todo}', 'App\Http\Controllers\TodoController@check');
-    Route::delete('{todo}', 'App\Http\Controllers\TodoController@delete');
-});
-
-Route::get('/create', function () {
-    return view('create');
+    Route::get('/', [TodoController::class, 'index']);
+    Route::get('create', [TodoController::class, 'create']);
+    Route::post('store-data', [TodoController::class, 'store']);
+    Route::delete('{todo}', [TodoController::class, 'delete']);
+    Route::get('{todo}', [TodoController::class, 'details']);
+    Route::get('{todo}/edit', [TodoController::class, 'edit']);
+    Route::post('{todo}', [TodoController::class, 'update']);
+    Route::post('{todo}', [TodoController::class, 'updateTags']);
+    Route::post('check/{todo}', [TodoController::class, 'check']);
+    
 });
