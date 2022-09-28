@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTagPostRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\Category;
+use App\Models\Tag;
 
 class TodoController extends Controller
 {
@@ -88,43 +90,66 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function updateTags(Request $request, $todoID) {
-        $nullCounter = 0;
-        $tagData = $request->input('tags');
+    public function updateTags(StoreTagPostRequest $request, $todoID) { 
+        $currentTodo = Todo::with('category')
+        ->with('tags')
+        ->withCount('tags')
+        ->where('id', '=', $todoID)
+        ->first();
 
-        foreach($tagData as $tag) {
-        // Check if any tag names are null. if 1 or 2 are null in total, then continue with the remaining tags.
-        // IF all tag names are null. return the user to the edit page and flash a fail message.
-            if($tag['name'] == NULL) {
-                $nullCounter += 1;
+        try {
+            $data = $request->validated();
+        } catch (ValidationException $e) {
+            return redirect('/todos/' . $todoID . '/edit');
+        }
+        $tagEntities = [];
+        $validTags = $data['tags'];
+        foreach ($validTags as $tag) {
+            $tagEntity = Tag::where('name', $tag['name'])->first();
+
+            if (null === $tagEntity) {
+                $tagEntity = Tag::create([
+                    'name' => $tag['name'],
+                    'color' => $tag['color']
+                ]);
+
+                $tagEntities[] = $tagEntity;
                 continue;
             }
 
-        // Check if the tag name is to long. if it is then return the user to the edit page and flash a fail message.
-        // If it isn't to long, then check with Regex if it doesn't contain any illegal characters or a dash at the end of the string.
-        // If it does have any illegal characters or a dash at the end of the string, then return the user to the edit page and flash a fail message.
-        // If the name does not have any illegal characters or a dash at the end, then proceed with creating new tags or applying existing ones to the todo.
-            if (strlen($tag['name']) > 25) {
-                session()->flash('failure', 'Tag name was to long please keep it under 25 letters/numbers');
-                return redirect('/todos/' . $todoID . '/edit');
-            } else {
-                if(preg_match('/^[a-zA-Z][a-zA-Z\d\-]+[a-zA-Z\d]$/', $tag['name'], $output_array) == false) {
-                    session()->flash('failure', 'Tag name contained illegal characters stick to letters, numbers and dashes, but dont end with a dash');
-                    return redirect('/todos/' . $todoID . '/edit');
-                } else {
-                // echo $output_array[0] . ' regex <br>';
-                $tag['name'] = $output_array[0];
-                $newTag = $tag;
-                }
-                
-            } 
-            echo $newTag['name'] . $newTag['color'] . ' validated tags <br>';
-        }
+            if ($tagEntity->color !== $tag['color']) {
+                $tagEntity->color = $tag['color'];
+                $tagEntity->save();
+                $tagEntities[] = $tagEntity;
+                continue;
+            }
 
-    if($nullCounter === 3) {
-        session()->flash('failure', 'No tag names were inputted');
-        return redirect('/todos/' . $todoID . '/edit');
-    }
+            $tagEntities[] = $tagEntity;
+        }
+       
+
+        $tagIDS = array_map(function($tag) {
+            return $tag->id;
+        }, $tagEntities);
+        
+        $currentTodo->tags()->sync($tagIDS);
+        $currentTodo->save();
+
+
+
+        return redirect('/todos');
+
+        // $tagCount = $currentTodo->tags_count;
+        // foreach($currentTodo->tags as $todoTag) {
+        // echo $todoTag->name;
+        // }
+        // foreach($data as $tag) {
+        //     $totalTagCounter++;
+        //     if($tag[$totalTagCounter]['name'] === $currentTodo->tags->$tagCount->name) {
+        //         dd('name matches');
+        //     };
+        // }
+
     
         // if tag(s) is/are new create the new tag(s) in the tags table then create the link between the todo and the tag(s)
         // else simply create the link between the tag+todo
