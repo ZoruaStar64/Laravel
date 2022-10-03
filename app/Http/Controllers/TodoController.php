@@ -134,26 +134,17 @@ class TodoController extends Controller
         
         $currentTodo->tags()->sync($tagIDS);
         $currentTodo->save();
-
-
+        
+        $unusedTags = Tag::doesntHave('todos')->get();
+        // $unusedTags = $allUnusedTags-;
+        
+        if ($unusedTags !== null) {
+        foreach($unusedTags as $unusedTag) {
+            $unusedTag->delete();
+        }
+    }
 
         return redirect('/todos');
-
-        // $tagCount = $currentTodo->tags_count;
-        // foreach($currentTodo->tags as $todoTag) {
-        // echo $todoTag->name;
-        // }
-        // foreach($data as $tag) {
-        //     $totalTagCounter++;
-        //     if($tag[$totalTagCounter]['name'] === $currentTodo->tags->$tagCount->name) {
-        //         dd('name matches');
-        //     };
-        // }
-
-    
-        // if tag(s) is/are new create the new tag(s) in the tags table then create the link between the todo and the tag(s)
-        // else simply create the link between the tag+todo
-
     }
 
     public function check(Todo $todo) {

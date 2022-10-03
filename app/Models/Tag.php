@@ -11,6 +11,6 @@ class Tag extends Model
     public $fillable = ['name', 'color'];
 
     public function todos() {
-        return $this->belongsToMany(Todo::class)->withPivot('tag_todo');
+        return $this->belongsToMany(Todo::class)->withPivot('id', 'tag_id', 'todo_id');
     }
 }
