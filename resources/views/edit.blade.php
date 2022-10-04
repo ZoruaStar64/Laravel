@@ -35,9 +35,11 @@
             <br>
             <textarea class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="description" rows="3">{{$todos->description}}</textarea>
         </div>
-        <div x-data data-tags='[name: "this", name: "is"]'>
+        <div x-data data-tags='["this", "is"]'>
             <div x-data="selectTags" x-init="init('parentEl')" class="form-group m-3">
-                    <input type="text" x-model="textInput" x-ref="textInput" @keydown.enter.prevent="addTag(textInput)" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tag" placeholder="Add a new tag (max: 3)" value="">
+                    <input type="hidden" value="#FFF" x-model="kleur" >
+                    <input type="text" x-model="textInput" x-ref="textInput" @keydown.enter.prevent="addTag([textInput, kleur])" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tag" placeholder="Add a new tag (max: 3)" value="">
+                    
                     <br>
                     <template x-for="(tag, index) in tags">
                         <div  class="bg-slate-600 inline-flex items-center text-xl rounded mt-2 mr-1">
