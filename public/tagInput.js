@@ -9,24 +9,32 @@
 const selectTags = () => {
     return {
         open: false, //If im right this is to Enable/Disable the input field
-        tags: ['this', 'is', 'good', 'not'],
         textInput: '',
+        tags: [],
         init() {
             //this will contain an array of values that need to exist upon load
+            this.tags = JSON.parse(this.$el.parentNode.getAttribute('data-tags')); 
         },
-        addTag() {
+        addTag(tag) {
             //this will add a tag to the tags array after several other functions
-            if(this.tags.length < 4) {
+            // check if input = string and also check what hasTag returns
+            tag = tag.trim();
+            if(this.tags.length < 3 && tag !== "") {
                 console.log('is nice');
+                this.tags.push(tag);
+                console.log(this.tags);
             } else {
                 console.log('is not nice');
             }
+            this.clearSearch();
         },
         hasTag() {
             // This function will check if a tag is empty or already exists within the tags array
         },
         removeTag(index) {
-            // does literally what the name says
+            // gebruik hier splice (index, 1)
+            this.tags.splice(index, 1);
+            this.toggleSearch();
         },
         updateTagsEvent() {
             // Im pretty sure this isn't neccasary and only exists for debugging/testing purposes
@@ -41,7 +49,7 @@ const selectTags = () => {
         },
         toggleSearch() {
             // This can toggle the search on/off
-            this.open = this.textInput;
+            this.open = this.textInput != '';
         }
     }
 }

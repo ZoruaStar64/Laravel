@@ -35,8 +35,20 @@
             <br>
             <textarea class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="description" rows="3">{{$todos->description}}</textarea>
         </div>
-        <div x-data="selectTags" class="form-group m-3">
-            <span id="test" @click="addTag()">console log a string</span>
+        <div x-data data-tags='[name: "this", name: "is"]'>
+            <div x-data="selectTags" x-init="init('parentEl')" class="form-group m-3">
+                    <input type="text" x-model="textInput" x-ref="textInput" @keydown.enter.prevent="addTag(textInput)" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tag" placeholder="Add a new tag (max: 3)" value="">
+                    <br>
+                    <template x-for="(tag, index) in tags">
+                        <div  class="bg-slate-600 inline-flex items-center text-xl rounded mt-2 mr-1">
+                            <span class="ml-1 mr-1 leading-relaxed truncate max-w-sm" x-text="tag"></span>
+                            <button class="mx-2" @click.prevent="removeTag(index)">
+                                <i class="fa fa-trash-alt text-red-600 text-xl"></i>
+                            </button>
+                        </div>
+                    </template>
+                    
+            </div>
         </div>
         <div class="form-group m-3">
             <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Update">
