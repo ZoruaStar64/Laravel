@@ -1,6 +1,7 @@
 @extends('layouts/frontend')
 
 @section('content')
+@vite('resources/js/bootstrap.js')
 
     @if(session()->has('failure'))
         <div class="rounded-none bg-red-500 w-96 h-18 mx-auto">
@@ -9,9 +10,7 @@
     @endif
 
 <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
-<div>
-    <span id="test"></span>
-</div>
+
     <form action="/todos/{{$todos->id}}" method="post" class="mx-auto p-4 flex-row">
         @csrf
 
@@ -36,7 +35,9 @@
             <br>
             <textarea class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="description" rows="3">{{$todos->description}}</textarea>
         </div>
-
+        <div x-data="selectTags" class="form-group m-3">
+            <span id="test" @click="addTag()">console log a string</span>
+        </div>
         <div class="form-group m-3">
             <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Update">
         </div>
@@ -44,11 +45,12 @@
     </form>
 
 
-    <form action="/todos/{{$todos->id}}" method="post" class="mx-auto p-4 flex-row">
+    <!-- <form action="/todos/{{$todos->id}}" method="post" class="mx-auto p-4 flex-row">
+
         @csrf
-    <!-- @foreach($todos->tags as $tag)
+    @foreach($todos->tags as $tag)
       <h1 style="color: {{$tag->color}}"> #{{ $tag->name }} </h1>   
-    @endforeach -->
+    @endforeach
     @for($tagTotal = 1; $tagTotal < 4; $tagTotal++)
 
         <div class="form-group m-3">
@@ -56,9 +58,9 @@
             <label class="text-white text-xl flex-row mx-auto" for="tag{{ $tagTotal }}">Tag {{ $tagTotal }}</label><label class="text-white text-xl flex-row mx-auto" for="color{{ $tagTotal }}">Color {{ $tagTotal }}</label>
             </div>
             @if(empty($todos->tags[$tagTotal - 1]))
-            <input type="text"  class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tags[{{ $tagTotal }}][name]" value=""> <!-- hier de values die van al bestaande tags zijn -->
+            <input type="text"  class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tags[{{ $tagTotal }}][name]" value="">
                 @else
-                <input type="text"  class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tags[{{ $tagTotal }}][name]" value="{{$todos->tags[$tagTotal - 1]->name}}"> <!-- hier de values die van al bestaande tags zijn -->
+                <input type="text"  class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tags[{{ $tagTotal }}][name]" value="{{$todos->tags[$tagTotal - 1]->name}}"> hier de values die van al bestaande tags zijn
             @endif
             <select class="form-control mt-2 px-3 py-2 rounded-t-lg w-48" name="tags[{{ $tagTotal }}][color]" id="color{{ $tagTotal }}">
                 <option style="background-color: #000; color: #FFF;"  value="#000">Black</option> 
@@ -78,7 +80,7 @@
             <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="UpdateTags">
         </div>
         
-    </form>
+    </form> -->
     <script type="text/javascript" src="{{ asset('/tagInput.js') }}"></script>
 </div>
 @endsection
