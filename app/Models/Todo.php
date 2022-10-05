@@ -29,4 +29,12 @@ class Todo extends Model
     {
         return $this->belongsToMany(Tag::class)->withPivot('id', 'tag_id', 'todo_id');
     }
+
+    public function getTagNamesAttribute()
+    {
+        
+        return array_map(function ($tag) {
+            return ['name' => $tag['name'], 'color' => $tag['color']];
+        },$this->tags->toArray());
+    }
 }

@@ -16,6 +16,7 @@ class StoreTagPostRequest extends FormRequest
  */
 protected function prepareForValidation()
 {
+    
     $this->merge([
         "tags" =>  array_filter($this->tags, function($tag) {
             return !empty($tag['name']);

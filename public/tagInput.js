@@ -6,22 +6,24 @@
 // remember to add the 3 max tags filter at addTag
 // some functions are called in nested divs (divs inside divs) 
 // call keyDown and click functions with @ (also sometimes they use .prevent make sure to look up what that does)
-const selectTags = () => {
-    return {
+const selectTags = () => ({
         open: false, //If im right this is to Enable/Disable the input field
-        textInput: '',
+        textInput: "",
+        color: "#FFF",
+        newColor: "",
         tags: [],
         init() {
             //this will contain an array of values that need to exist upon load
             this.tags = JSON.parse(this.$el.parentNode.getAttribute('data-tags')); 
         },
-        addTag(tag) {
+        addTag(tag, color) {
             //this will add a tag to the tags array after several other functions
             // check if input = string and also check what hasTag returns
-            tag = tag.trim();
+            console.log(color);
+            const tagName = tag.trim();
             if(this.tags.length < 3 && tag !== "") {
                 console.log('is nice');
-                this.tags.push(tag);
+                this.tags.push({name:tagName, color});
                 console.log(this.tags);
             } else {
                 console.log('is not nice');
@@ -35,6 +37,11 @@ const selectTags = () => {
             // gebruik hier splice (index, 1)
             this.tags.splice(index, 1);
             this.toggleSearch();
+        },
+        updateTagColor(index, newColor) {
+            console.log(this.tags);
+            this.tags[index]['color'] = newColor;
+            
         },
         updateTagsEvent() {
             // Im pretty sure this isn't neccasary and only exists for debugging/testing purposes
@@ -51,7 +58,7 @@ const selectTags = () => {
             // This can toggle the search on/off
             this.open = this.textInput != '';
         }
-    }
-}
+    })
+
 
 export default selectTags;
