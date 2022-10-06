@@ -143,63 +143,6 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function updateTags(StoreTagPostRequest $request, $todoID) { 
-        $currentTodo = Todo::with('category')
-        ->with('tags')
-        ->withCount('tags')
-        ->where('id', '=', $todoID)
-        ->first();
-
-        try {
-            $data = $request->validated();
-        } catch (ValidationException $e) {
-            return redirect('/todos/' . $todoID . '/edit');
-        }
-        $tagEntities = [];
-        $validTags = $data['tags'];
-        foreach ($validTags as $tag) {
-            $tagEntity = Tag::where('name', $tag['name'])->first();
-
-            if (null === $tagEntity) {
-                $tagEntity = Tag::create([
-                    'name' => $tag['name'],
-                    'color' => $tag['color']
-                ]);
-
-                $tagEntities[] = $tagEntity;
-                continue;
-            }
-
-            if ($tagEntity->color !== $tag['color']) {
-                $tagEntity->color = $tag['color'];
-                $tagEntity->save();
-                $tagEntities[] = $tagEntity;
-                continue;
-            }
-
-            $tagEntities[] = $tagEntity;
-        }
-       
-
-        $tagIDS = array_map(function($tag) {
-            return $tag->id;
-        }, $tagEntities);
-        
-        $currentTodo->tags()->sync($tagIDS);
-        $currentTodo->save();
-        
-        $unusedTags = Tag::doesntHave('todos')->get();
-        // $unusedTags = $allUnusedTags-;
-        
-        if ($unusedTags !== null) {
-        foreach($unusedTags as $unusedTag) {
-            $unusedTag->delete();
-        }
-    }
-
-        return redirect('/todos');
-    }
-
     public function check(Todo $todo) {
         try {
            $data = $this->validate(request(), [

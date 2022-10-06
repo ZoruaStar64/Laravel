@@ -35,7 +35,7 @@
             <br>
             <textarea class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="description" rows="3">{{$todos->description}}</textarea>
         </div>
-        <div x-data data-tags='{{json_encode($todos->tag_names)}}'>
+        <div x-data @tags-update="{ tagsList: $event.detail.tags }" data-tags='{{json_encode($todos->tag_names)}}'>
             <div x-data="selectTags" x-init="init('parentEl')" class="form-group m-3">
                 
                     <input type="hidden" x-model="color" >
@@ -57,6 +57,8 @@
                         <!-- hier moet een hidden input veld zijn met de namen van de values en de values zelf -->
                         
                         <div class="bg-slate-600 flex-col items-center text-xl rounded mt-2 mr-1">
+                            <input type="hidden" x-bind:name="'tags['+ index +'][name]'" x-model="tag.name">
+                            <input type="hidden" x-bind:name="'tags['+ index +'][color]'" x-model="tag.color">
                             <div class="flex justify-evenly">
                                 <span class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm" x-text="tag.name"></span>
                                 <span class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm" x-text="tag.color"></span>
@@ -70,7 +72,8 @@
                         </div>
                         
                     </template>
-                    <span x-model="tags"></span>
+                    
+                    <!-- <input type="hidden" x-model="tags" id="tagsList" name="tagsList[]" multiple="multiple"/> -->
             </div>
         </div>
         <div class="form-group m-3">
