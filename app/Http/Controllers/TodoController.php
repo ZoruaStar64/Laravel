@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTagPostRequest;
+use App\Http\Requests\StorePostRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -32,13 +32,9 @@ class TodoController extends Controller
         ]);
     }
 
-    public function store() {
+    public function store(StorePostRequest $request) {
         try {
-           $data = $this->validate(request(), [
-                'name' => ['required'],
-                'categories_id' => ['required', "numeric"],
-                'description' => ['required']
-            ]);
+           $data = $request->validated();
         } catch (ValidationException $e) {
             return response()->json($e->errors());
         }
@@ -68,14 +64,20 @@ class TodoController extends Controller
             'categories' => $allCategories
         ]);
     }
+    public function removeUnusedTags() {
+        $unusedTags = Tag::doesntHave('todos')->get();
 
-    public function update(Todo $todo, StoreTagPostRequest $request, $todoID) {
+        if ($unusedTags !== null) {
+        foreach($unusedTags as $unusedTag) {
+            $unusedTag->delete();
+        }
+    }
+}
+    public function update(StorePostRequest $request, $todoID) {
+        $todo = Todo::with('category')->where('id', '=', $todoID)->first();
+        
         try {
-            $data = $this->validate(request(), [
-                'name' => ['required'],
-                'categories_id' => ['required', "numeric"],
-                'description' => ['required'],
-            ]);
+            $data = $request->validated();
         } catch (ValidationException $e) {
             return response()->json($e->errors());
         }
@@ -97,6 +99,15 @@ class TodoController extends Controller
         } catch (ValidationException $e) {
             return redirect('/todos/' . $todoID . '/edit');
         }
+        if(empty($data['tags'])) {
+            if($currentTodo->tags_count === 0) {
+                return redirect('/todos');
+            }
+            $currentTodo->tags()->detach();
+            $this->removeUnusedTags();
+            return redirect('/todos');
+        }
+
         $tagEntities = [];
         $validTags = $data['tags'];
         foreach ($validTags as $tag) {
@@ -129,19 +140,14 @@ class TodoController extends Controller
         
         $currentTodo->tags()->sync($tagIDS);
         $currentTodo->save();
-        
-        $unusedTags = Tag::doesntHave('todos')->get();
-        // $unusedTags = $allUnusedTags-;
-        
-        if ($unusedTags !== null) {
-        foreach($unusedTags as $unusedTag) {
-            $unusedTag->delete();
-        }
-    }
+
+        $this->removeUnusedTags();
 
         session()->flash('success', 'Todo updated succesfully!');
         return redirect('/todos');
     }
+
+
 
     public function check(Todo $todo) {
         try {

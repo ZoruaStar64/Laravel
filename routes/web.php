@@ -30,7 +30,6 @@ Route::prefix('todos')->group(function () {
     Route::get('{todo}', [TodoController::class, 'details']);
     Route::get('{todo}/edit', [TodoController::class, 'edit']);
     Route::post('{todo}', [TodoController::class, 'update']);
-    Route::post('{todo}', [TodoController::class, 'updateTags']);
     Route::post('check/{todo}', [TodoController::class, 'check']);
     
 });
