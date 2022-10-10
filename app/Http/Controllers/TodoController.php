@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\Category;
 use App\Models\Tag;
@@ -42,7 +40,54 @@ class TodoController extends Controller
         $todo = Todo::create($data);
         $todo->save();
 
-        session()->flash('success', 'Todo created succesfully!');
+        $newTodo = Todo::with('category')
+        ->with('tags')
+        ->where('id', '=', $todo->id)
+        ->first();
+
+        try {
+            $data = $request->validated();
+        } catch (ValidationException $e) {
+            return redirect('/todos/' . $todo->id . '/edit');
+        }
+        if(empty($data['tags'])) {
+            session()->flash('success', 'Todo without Tags created succesfully!');
+            return redirect('/todos');
+        }
+
+        $tagEntities = [];
+        $validTags = $data['tags'];
+        foreach ($validTags as $tag) {
+            $tagEntity = Tag::where('name', $tag['name'])->first();
+
+            if (null === $tagEntity) {
+                $tagEntity = Tag::create([
+                    'name' => $tag['name'],
+                    'color' => $tag['color']
+                ]);
+
+                $tagEntities[] = $tagEntity;
+                continue;
+            }
+
+            if ($tagEntity->color !== $tag['color']) {
+                $tagEntity->color = $tag['color'];
+                $tagEntity->save();
+                $tagEntities[] = $tagEntity;
+                continue;
+            }
+
+            $tagEntities[] = $tagEntity;
+        }
+       
+        $tagIDS = array_map(function($tag) {
+            return $tag->id;
+        }, $tagEntities);
+        
+        $newTodo->tags()->sync($tagIDS);
+        $newTodo->save();
+
+        session()->flash('success', 'Todo with Tags created succesfully!');
         return redirect('/todos');
     }
 
@@ -133,7 +178,6 @@ class TodoController extends Controller
             $tagEntities[] = $tagEntity;
         }
        
-
         $tagIDS = array_map(function($tag) {
             return $tag->id;
         }, $tagEntities);
@@ -146,8 +190,6 @@ class TodoController extends Controller
         session()->flash('success', 'Todo updated succesfully!');
         return redirect('/todos');
     }
-
-
 
     public function check(Todo $todo) {
         try {
@@ -166,6 +208,7 @@ class TodoController extends Controller
     }
 
     public function delete(Todo $todo) {
+        $todo->tags()->detach();
         $todo->delete();
 
         session()->flash('success', 'Todo deleted succesfully!');

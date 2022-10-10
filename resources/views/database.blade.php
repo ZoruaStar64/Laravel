@@ -77,6 +77,11 @@
                         </button>
                     </form>
                 @endif
+                
+                @foreach ($todo->tags as $tag)
+                        <h1 style="color: {{$tag->color}}">#{{ $tag->name }}</h1>
+                    @endforeach
+
                     </li>
                     <li class="text-cyan-600 text-xl">{{ $todo->category->name }}</li>
                     <li class="text-white text-lg">{{ $todo->description }}</li>
