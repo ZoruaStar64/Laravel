@@ -1,7 +1,9 @@
+
 const selectTags = () => ({
+        
         open: false, //If im right this is to Enable/Disable the input field
         textInput: "",
-        color: "#FFF",
+        color: "#FFFFFF",
         newColor: "",
         tags: [],
         tagsList: [],

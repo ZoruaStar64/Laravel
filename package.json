@@ -14,6 +14,7 @@
         "vite": "^2.9.15"
     },
     "dependencies": {
+        "@simonwep/pickr": "^1.8.2",
         "alpinejs": "^3.10.3",
         "bootstrap": "^5.1.3",
         "font-awesome": "^4.7.0",

@@ -39,46 +39,42 @@
             <div x-data="selectTags" x-init="init('parentEl')" class="form-group m-3">
             
                 <input type="text" x-model="textInput" x-ref="textInput" @keydown.enter.prevent="addTag(textInput, color)" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tag" placeholder="Add a new tag (max: 3)" value="">                                       
-                    <select x-model="color"  class="form-control rounded-t-lg mx-auto my-2 px-3 py-2 w-48">
-                        <option value="" selected disabled>Select new tag color</option>
-                        <option style="background-color: #000;" value="#000"></option> 
-                        <option style="background-color: #FFF;"  value="#FFF"></option>
-                        <option style="background-color: #09F;" value="#09F"></option>
-                        <option style="background-color: #C00;" value="#C00"></option>
-                        <option style="background-color: #93F;" value="#93F"></option>
-                        <option style="background-color: #3C3;" value="#3C3"></option>
-                    </select>  
+                <input x-model="color" style="height: 40px;" type="color" class="form-control form-control-color py-2" id="colorInput" value="#563d7c" title="Choose your color" list="presetColors">
+                    <datalist id="presetColors">
+                        <option>#000000</option>
+                        <option>#ffffff</option>
+                        <option>#0099ff</option>
+                        <option>#cc0000</option>
+                        <option>#9933ff</option>
+                        <option>#33cc33</option>
+                    </datalist>    
                     <br>
-                    
+
+                    <div class="flex flex-row justify-start">
                 <template x-for="(tag, index) in tags">                      
-                    <div class="bg-slate-600 flex-col items-center text-xl rounded mt-2 mr-1">
+                    <div class="text-m rounded mt-2 mr-1">
                         <input type="hidden" x-bind:name="'tags['+ index +'][name]'" x-model="tag.name">
                         <input type="hidden" x-bind:name="'tags['+ index +'][color]'" x-model="tag.color">
-                        <div class="flex justify-evenly">
-                            <span class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm" x-text="tag.name"></span>
-                            <div x-data="{BGC: tag.color}" class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm">
-                                <div x-model="BGC" :style="`background-color: ${BGC}`" class="box-border w-5 h-5 rounded-full mx-auto"></div>
-                                <span x-text="tag.color"></span>
-                                
-                            </div>
                             
-                            <div x-data="{BGC: tag.color}">
-                            <select x-model="BGC" x-on:change="updateTagColor(index, $el.value)" :style="`background-color: ${BGC}`" class="form-control rounded-t-lg mx-auto my-2 py-2 w-48">
-                                <option value="" disabled>Select new tag color</option>
-                                <option style="background-color: #000;" value="#000"></option> 
-                                <option style="background-color: #FFF;" value="#FFF"></option>
-                                <option style="background-color: #09F;" value="#09F"></option>
-                                <option style="background-color: #C00;" value="#C00"></option>
-                                <option style="background-color: #93F;" value="#93F"></option>
-                                <option style="background-color: #3C3;" value="#3C3"></option>
-                            </select> 
+                            <div class="mx-1 p-1 text-white bg-purple-500 leading-relaxed truncate max-w-sm">
+                                <span class="" x-text="tag.name"></span>
+                                <input style="height: 1em; width: 2.5em;" type="color"  x-on:change="updateTagColor(index, $el.value)" 
+                                class="form-control form-control-color mt-2" id="colorInput" value="#563d7c" title="Choose your color" list="presetColors">
+                                <datalist id="presetColors">
+                                    <option>#000000</option>
+                                    <option>#ffffff</option>
+                                    <option>#0099ff</option>
+                                    <option>#cc0000</option>
+                                    <option>#9933ff</option>
+                                    <option>#33cc33</option>
+                                </datalist>
+                                <button class="px-1" @click.prevent="removeTag(index)">
+                                    X
+                                </button>
                             </div>
-                            <button class="mx-2 px-2 bg-slate-800 rounded-lg" @click.prevent="removeTag(index)">
-                                <i class="fa fa-trash-alt text-red-600 text-xl"></i>
-                            </button>
-                        </div>
                     </div>
                 </template>
+            </div>
             </div>
         </div>
 
