@@ -2,6 +2,18 @@
 
 @section('content')
 @vite('resources/js/bootstrap.js')
+
+<?php 
+$colorOptions = '   
+<option>#000000</option>
+<option>#ffffff</option>
+<option>#0099ff</option>
+<option>#cc0000</option>
+<option>#9933ff</option>
+<option>#33cc33</option>
+';
+?>
+
 <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
     <form action="store-data" method="post" class="mx-auto flex-row">
         @csrf
@@ -31,35 +43,33 @@
         <div x-data @tags-update="{ tagsList: $event.detail.tags }" data-tags='[]'>
                 <div x-data="selectTags" x-init="init('parentEl')" class="form-group m-3">
                     
-                <input type="hidden" x-model="color" >
                 <input type="text" x-model="textInput" x-ref="textInput" @keydown.enter.prevent="addTag(textInput, color)" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="tag" placeholder="Add a new tag (max: 3)" value="">                                       
-                    <select x-model="newColor"  class="form-control rounded-t-lg mx-auto my-2 px-3 py-2 w-96">
-                        <option value="" disabled>Select a new tag color</option>
-                        <option style="background-color: #000; color: #FFF;"  value="#000">Black</option> 
-                        <option style="background-color: #FFF; color: #000;"  value="#FFF">White</option>
-                        <option style="background-color: #09F;" value="#09F">Blue</option>
-                        <option style="background-color: #C00;" value="#C00">Red</option>
-                        <option style="background-color: #93F;" value="#93F">Purple</option>
-                        <option style="background-color: #3C3;" value="#3C3">Green</option>
-                    </select>  
-                    <br>
+                <input x-model="color" style="height: 40px;" type="color" class="form-control form-control-color py-2" id="colorInput" value="#563d7c" title="Choose your color" list="presetColors">
+                <datalist id="presetColors">
+                    <?php echo $colorOptions ?>
+                </datalist>    
+                <br>
                         
-                <template x-for="(tag, index) in tags">                      
-                    <div class="bg-slate-600 flex-col items-center text-xl rounded mt-2 mr-1">
-                        <input type="hidden" x-bind:name="'tags['+ index +'][name]'" x-model="tag.name">
-                        <input type="hidden" x-bind:name="'tags['+ index +'][color]'" x-model="tag.color">
-                        <div class="flex justify-evenly">
-                            <span class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm" x-text="tag.name"></span>
-                            <span class="mx-2 p-2 bg-slate-500 rounded-lg leading-relaxed truncate max-w-sm" x-text="tag.color"></span>
-                            <button class="mx-2 p-2 bg-slate-400 rounded-lg hover:bg-slate-500" @click.prevent="updateTagColor(index, newColor)">
-                                Replace current tag color
-                            </button>
-                            <button class="mx-2 px-2 bg-slate-800 rounded-lg" @click.prevent="removeTag(index)">
-                                <i class="fa fa-trash-alt text-red-600 text-xl"></i>
-                            </button>
+                <div class="flex flex-row justify-start">
+                    <template x-for="(tag, index) in tags">                      
+                        <div class="text-m rounded mt-2 mr-1">
+                            <input type="hidden" x-bind:name="'tags['+ index +'][name]'" x-model="tag.name">
+                            <input type="hidden" x-bind:name="'tags['+ index +'][color]'" x-model="tag.color">
+                                
+                            <div class="mx-1 p-1 rounded-lg text-white bg-sky-600 leading-relaxed truncate max-w-sm flex flex-row justify-start">
+                                <span class="" x-text="tag.name"></span>
+                                <input x-model="tag.color" style="height: 1.5em; width: 3em; background: none;" type="color"  x-on:change="updateTagColor(index, $el.value)" 
+                                class="form-control form-control-color mt-1 text-black" id="colorInput" value="#563d7c" title="Choose your color" list="presetColors">
+                                <datalist id="presetColors">
+                                <?php echo $colorOptions ?>
+                                </datalist>
+                                <button class="px-1" @click.prevent="removeTag(index)">
+                                    X
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
         </div>
 

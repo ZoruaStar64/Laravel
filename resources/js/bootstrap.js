@@ -47,38 +47,11 @@ Alpine.start();
 //     enabledTransports: ['ws', 'wss'],
 // });
 
-// Simple example, see optional options for more configuration.
-// const customColorPicker = document.querySelector('.customColorPicker');
-// const mypickr = new Pickr({
-//     el: '.customColorPicker',
-//     theme: 'monolith', // or 'monolith', or 'nano'
-
-//     swatches: [
-//         '#FFF',
-//         '#09F',
-//         '#C00',
-//         '93F',
-//         '#3C3',
-//         '#000'
-//     ],
-
-//     components: {
-
-//         // Main components
-//         preview: false,
-//         opacity: false,
-//         hue: false,
-
-//         // Input / output Options
-//         interaction: {
-//             hex: true,
-//             rgba: false,
-//             hsla: false,
-//             hsva: false,
-//             cmyk: false,
-//             input: true,
-//             clear: true,
-//             save: true
-//         }
-//     }
-// });
+export function isDarkOrLight(bgColor) {
+    var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+    var r = parseInt(color.substring(0, 2), 16); // hexToR
+    var g = parseInt(color.substring(2, 4), 16); // hexToG
+    var b = parseInt(color.substring(4, 6), 16); // hexToB
+    return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 186) ?
+      true : false;
+  }

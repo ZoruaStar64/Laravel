@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 
 class StorePostRequest extends FormRequest
 {
@@ -24,10 +22,7 @@ protected function prepareForValidation()
     $this->merge([
         "tags" =>  array_filter($this->tags, function($tag) {
             
-            return !empty($tag['name']);
-            
-                
-            
+            return !empty($tag['name']);  
         })
     ]);
 }
