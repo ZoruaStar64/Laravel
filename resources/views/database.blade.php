@@ -3,18 +3,8 @@
 
 <!-- this causes the tasks database page's body/main to appear -->
 @section('content')
-@vite('resources/js/bootstrap.js')
-<script>
-function isDarkOrLight(bgColor) {
-    var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
-    var r = parseInt(color.substring(0, 2), 16); // hexToR
-    var g = parseInt(color.substring(2, 4), 16); // hexToG
-    var b = parseInt(color.substring(4, 6), 16); // hexToB
-    return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 9) ?
-      true : false;
-  }
-let bgColor = '';
-</script>
+<script type="text/javascript" src="/tagColorChooser.js"></script>
+
     <div class="bg-slate-700 mx-auto my-8 px-4 py-8 container">
         <div class="flex mx-auto justify-evenly text-white">
             <a href="/todos"><span class="mb-0 text-2xl">Tasks</span></a>
@@ -54,15 +44,12 @@ let bgColor = '';
 
                     <div class="flex flex-row justify-start">
                         @foreach ($todo->tags as $tag)
-                        <script>
-                            
-                            bgColor = '{{$tag->color}}';
-                            console.log(bgColor);
-                            textColor = isDarkOrLight(bgColor) ? 'black' : 'white';
-                            console.log(textColor);
-                            color = ''
-                        </script>
-                            <h1 class="p-2 mr-2 my-1 rounded-lg" style="color: isDarkOrLight(color); background-color: {{$tag->color}}; ">#{{ $tag->name }}</h1>
+                        <div>
+                            <h1 class="p-2 mr-2 my-1 rounded-lg" id="{{$todo->id . $tag->id}}" style="background-color: {{$tag->color}}; ">#{{ $tag->name }}</h1>
+                            <script>
+                                decideTextColor("{{$todo->id . $tag->id}}", "{{$tag->color}}");
+                            </script>
+                        </div>
                         @endforeach
                     </div>
 
@@ -103,14 +90,12 @@ let bgColor = '';
                 
                 <div class="flex flex-row justify-start">
                         @foreach ($todo->tags as $tag)
+                        <div>
+                        <h1 class="p-2 mr-2 my-1 rounded-lg" id="{{$todo->id . $tag->id}}" style="background-color: {{$tag->color}};">#{{ $tag->name }}</h1>
                         <script>
-                            color = '{{$tag->color}}';
-                            console.log(color);
-                            textColor = isDarkOrLight(color) ? 'black' : 'white';
-                            console.log(textColor);
-                            color = ''
+                            decideTextColor("{{$todo->id . $tag->id}}", "{{$tag->color}}");
                         </script>
-                            <h1 class="p-2 mr-2 my-1 rounded-lg" style="color: isDarkOrLight(color); background-color: {{$tag->color}}">#{{ $tag->name }}</h1>
+                        </div>
                         @endforeach
                     </div>
 
@@ -132,6 +117,7 @@ let bgColor = '';
             </ul>
         </div>
     </div>
+    
 @endsection
 
 <!-- this causes the styling around the database button link to appear once active -->

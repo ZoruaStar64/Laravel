@@ -1,6 +1,7 @@
 @extends('layouts/frontend')
 
 @section('content')
+<script type="text/javascript" src="/tagColorChooser.js"></script>
 
 <div class="container rounded-lg bg-slate-700 p-4 mx-auto my-14 text-center">
     <div class="container rounded-lg bg-slate-600 py-2">
@@ -9,7 +10,10 @@
         <p class="text-lg mb-4">{{$todos->description}}</p>
         <div class="flex flex-row justify-center my-3 text-white">
             <p class="text-xl">Tags : @foreach($todos->tags as $tag)
-            <h1 class="p-2 mx-2 text-lg rounded-lg" style="background-color: {{$tag->color}}">#{{ $tag->name }}</h1>
+            <h1 class="p-2 mx-2 text-lg rounded-lg" id="{{$todos->id . $tag->id}}" style="background-color: {{$tag->color}}">#{{ $tag->name }}</h1>
+            <script>
+                decideTextColor("{{$todos->id . $tag->id}}", "{{$tag->color}}");
+            </script>
             @endforeach
             </p>
         </div>
