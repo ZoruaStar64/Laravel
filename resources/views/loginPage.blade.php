@@ -5,11 +5,16 @@
 @section('content')
 
 <div class="bg-slate-700 mx-auto my-8 px-4 py-8 container">
-
+@error('email')
+{{$message}}
+@enderror
+@error('password')
+{{$message}}
+@enderror
 <div class="flex justify-evenly mt-3 mx-auto text-white">
     <p>Login page</p>
     <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
-        <form action="login-user" method="post" class="mx-auto flex-row">
+        <form action="../login" method="post" class="mx-auto flex-row">
             @csrf
 
             <div class="form-group m-3">

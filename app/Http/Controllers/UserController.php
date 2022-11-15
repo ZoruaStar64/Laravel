@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function registerPage()
     {
-        return view('register');
+        return view('registerPage');
     }
 
     /**
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function loginPage()
     {
-        return view('login');
+        return view('loginPage');
     }
 
     /**

@@ -9,7 +9,7 @@
         <div class="flex justify-evenly mt-3 mx-auto text-white">
             <p>Register page</p>
             <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
-                <form action="register-user" method="post" class="mx-auto flex-row">
+                <form action="../register" method="post" class="mx-auto flex-row">
                     @csrf
                     
                     <div class="form-group m-3">

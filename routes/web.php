@@ -23,10 +23,10 @@ Route::view('/', 'index');
 Route::get('/weather', [WeatherController::class, 'index']);
 
 Route::prefix('user')->group(function() {
-    Route::get('register', [UserController::class, 'registerPage']);
-    Route::post('register-user', [UserController::class, 'register']);
-    Route::get('login', [UserController::class, 'loginPage']);
-    Route::post('login-user', [UserController::class, 'login']);
+    Route::get('register-user', [UserController::class, 'registerPage']);
+    // Route::post('register', [UserController::class, 'register']);
+    Route::get('login-user', [UserController::class, 'loginPage']);
+    // Route::post('login', [UserController::class, 'login']);
 });
 
 // All these routes are related to the Todos page
