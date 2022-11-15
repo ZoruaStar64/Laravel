@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,13 @@ Route::view('/', 'index');
 
 // This route here directs to the Weather API page
 Route::get('/weather', [WeatherController::class, 'index']);
+
+Route::prefix('user')->group(function() {
+    Route::get('register', [UserController::class, 'registerPage']);
+    Route::post('register-user', [UserController::class, 'register']);
+    Route::get('login', [UserController::class, 'loginPage']);
+    Route::post('login-user', [UserController::class, 'login']);
+});
 
 // All these routes are related to the Todos page
 Route::prefix('todos')->group(function () {

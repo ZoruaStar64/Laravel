@@ -37,4 +37,10 @@ class Todo extends Model
             return ['name' => $tag['name'], 'color' => $tag['color']];
         },$this->tags->toArray());
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withPivot('id', 'todo_id', 'user_id');
+    }
+
 }
