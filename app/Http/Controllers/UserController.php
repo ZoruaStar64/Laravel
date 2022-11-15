@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\ValidationException;
+use App\Http\Requests\StoreLoginRequest;
+use App\Http\Requests\StoreRegisterRequest;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -32,9 +36,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register(StoreRegisterRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+         } catch (ValidationException $e) {
+             return response()->json($e->errors());
+         }
+ 
+         $user = User::create($data);
+         $user->save();
+
+         session()->flash('success', 'Account created succesfully!');
+         return redirect('/');
     }
 
         /**
@@ -43,9 +57,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function login(StoreLoginRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+        } catch (ValidationException $e) {
+            return response()->json($e->errors());
+        }
+        $email = $data['email'];
+        $password = $data['password'];
+        $user = User::where([
+            ['password', '=', $password], ['email', '=', $email]
+            ])->first();
+            if (empty($user)) {
+                dd('This input does NOT match any user in the database');
+            }
+        dd('input matches with user: ' . $user['name']); 
     }
 
     /**

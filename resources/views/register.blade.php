@@ -15,19 +15,19 @@
                     <div class="form-group m-3">
                     <label class="text-white text-xl" for="name">Username</label>
                         <br>
-                        <input type="text" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="name" placeholder="Enter Username">
+                        <input type="text" class="form-control mt-2 px-3 py-2 rounded-lg w-96 text-black" name="name" placeholder="Enter Username" required>
                     </div>
 
                     <div class="form-group m-3">
                     <label class="text-white text-xl" for="email">E-mail</label>
                         <br>
-                        <input type="email" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="email" placeholder="Enter E-mail">
+                        <input type="email" class="form-control mt-2 px-3 py-2 rounded-lg w-96 text-black" name="email" placeholder="Enter E-mail" required>
                     </div>
 
                     <div class="form-group m-3">
                     <label class="text-white text-xl" for="password">Password</label>
                         <br>
-                        <input type="password" class="form-control mt-2 px-3 py-2 rounded-lg w-96" name="password" placeholder="Enter Password">
+                        <input type="password" class="form-control mt-2 px-3 py-2 rounded-lg w-96 text-black" name="password" placeholder="Enter Password" required>
                     </div>
 
                     <div class="form-group m-3">

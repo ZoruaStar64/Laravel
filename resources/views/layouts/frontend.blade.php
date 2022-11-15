@@ -22,7 +22,7 @@
             <a class="mr-10 @yield('weather-active') px-2 py-1" href="{{url('/weather')}}">Weather</a>
             <a class="mr-10 @yield('register-active') px-2 py-1" href="{{url('user/register')}}">Register</a>
             <a class="mr-10 @yield('login-active') px-2 py-1" href="{{url('user/login')}}">Log in</a>
-            <a class="mr-10 @yield('database-active') px-2 py-1" href="{{url('/todos')}}">Database</a> <!-- iets qua een to-do lijst -->
+            <a class="mr-10 @yield('database-active') px-2 py-1" href="{{url('/todos')}}">Database @yield('activity')</a> <!-- iets qua een to-do lijst -->
         </div>
 
     </div>

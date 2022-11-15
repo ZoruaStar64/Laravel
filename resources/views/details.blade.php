@@ -27,4 +27,11 @@
         </div>
     </div>
 </div>
+
+@section('activity')
+    | details
+@endsection
+@section('database-active')
+    border-2 rounded-lg border-red-700 bg-slate-800
+@endsection
 @endsection

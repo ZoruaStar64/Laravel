@@ -81,4 +81,11 @@ $colorOptions = '
     </div>
     <script type="text/javascript" src="{{ asset('/tagInput.js') }}"></script>
 </div>
+
+@section('activity')
+    | create
+@endsection
+@section('database-active')
+    border-2 rounded-lg border-red-700 bg-slate-800
+@endsection
 @endsection
