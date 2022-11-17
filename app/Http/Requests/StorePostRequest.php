@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 
-class StoreTagPostRequest extends FormRequest
+class StorePostRequest extends FormRequest
 {
 
 /**
@@ -16,9 +14,15 @@ class StoreTagPostRequest extends FormRequest
  */
 protected function prepareForValidation()
 {
+    
+    if($this->tags === null) {
+        $tag = 0;
+        return $tag;
+    }
     $this->merge([
         "tags" =>  array_filter($this->tags, function($tag) {
-            return !empty($tag['name']);
+            
+            return !empty($tag['name']);  
         })
     ]);
 }
@@ -41,6 +45,9 @@ protected function prepareForValidation()
     public function rules()
     {
         return [
+            'name' => ['required', 'string', 'min:3', 'max:30'],
+            'categories_id' => ['required', "numeric"],
+            'description' => ['required', 'string'],
             'tags.*.name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z][a-zA-Z\d\-]+[a-zA-Z\d]$/'],
             'tags.*.color' => ['exclude_if:tags.*.name,null', 'required'],
         ];

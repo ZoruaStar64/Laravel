@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,14 @@ Route::view('/', 'index');
 // This route here directs to the Weather API page
 Route::get('/weather', [WeatherController::class, 'index']);
 
+Route::prefix('user')->group(function() {
+    Route::get('register-user', [UserController::class, 'registerPage']);
+    // Route::post('register', [UserController::class, 'register']); Currently Obsolete thanks to Fortify
+    Route::get('login-user', [UserController::class, 'loginPage']);
+    // Route::post('login', [UserController::class, 'login']); Currently Obsolete thanks to Fortify
+    Route::get('resetPassPage', [UserController::class, 'resetPasswordPage']);
+});
+
 // All these routes are related to the Todos page
 Route::prefix('todos')->group(function () {
     Route::get('/', [TodoController::class, 'index']);
@@ -30,7 +39,6 @@ Route::prefix('todos')->group(function () {
     Route::get('{todo}', [TodoController::class, 'details']);
     Route::get('{todo}/edit', [TodoController::class, 'edit']);
     Route::post('{todo}', [TodoController::class, 'update']);
-    Route::post('{todo}', [TodoController::class, 'updateTags']);
     Route::post('check/{todo}', [TodoController::class, 'check']);
     
 });

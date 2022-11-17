@@ -1,13 +1,17 @@
 @extends('layouts/frontend')
 
+
 <!-- this causes the tasks database page's body/main to appear -->
 @section('content')
+<?php $loggedInUser = auth()->user(); ?>
+<script type="text/javascript" src="/tagColorChooser.js"></script>
+
     <div class="bg-slate-700 mx-auto my-8 px-4 py-8 container">
         <div class="flex mx-auto justify-evenly text-white">
             <a href="/todos"><span class="mb-0 text-2xl">Tasks</span></a>
             
             @if(session()->has('success'))
-                <div class="rounded-none bg-green-500">
+                <div class="rounded-none bg-green-500 p-2">
                     {{ session()->get('success') }}
                 </div>
             @endif
@@ -25,6 +29,7 @@
                 <div class="container rounded-lg bg-slate-600 px-4 py-4 mx-auto my-4 w-11/12">
                     <li class="relative">
                         <a class="text-cyan-500 text-xl" href="/todos/{{$todo->id}}">{{ $todo->name }}</a>
+                        <p class="text-cyan-500 text-xl">Creator: <span class="text-white">{{ $loggedInUser->name }}</span></p>
  
                     <!-- This checks if a task has been checked and displays an image fitting to the result -->
                     @if($todo->checked == true)
@@ -39,9 +44,16 @@
 
                     @endif
 
-                    @foreach ($todo->tags as $tag)
-                        <h1 style="color: {{$tag->color}}">#{{ $tag->name }}</h1>
-                    @endforeach
+                    <div class="flex flex-row justify-start">
+                        @foreach ($todo->tags as $tag)
+                        <div>
+                            <h1 class="p-2 mr-2 my-1 rounded-lg" id="{{$todo->id . $tag->id}}" style="background-color: {{$tag->color}}; ">#{{ $tag->name }}</h1>
+                            <script>
+                                decideTextColor("{{$todo->id . $tag->id}}", "{{$tag->color}}");
+                            </script>
+                        </div>
+                        @endforeach
+                    </div>
 
                     </li>
                     <li class="text-cyan-600 text-xl">{{ $todo->category->name }}</li>
@@ -66,6 +78,7 @@
                 <div class="container rounded-lg bg-slate-600 px-4 py-4 mx-auto my-4 w-11/12">
                     <li class="relative">
                         <a class="text-cyan-500 text-xl" href="/todos/{{$todo->id}}">{{ $todo->name }}</a>
+                        <p class="text-cyan-500 text-xl">Creator: <span class="text-white">{{ $loggedInUser->name }}</span></p>
                    <!-- This checks if a task has not been checked and displays an image fitting to the result -->
                     @if($todo->checked == false)
                     
@@ -77,6 +90,18 @@
                         </button>
                     </form>
                 @endif
+                
+                <div class="flex flex-row justify-start">
+                        @foreach ($todo->tags as $tag)
+                        <div>
+                        <h1 class="p-2 mr-2 my-1 rounded-lg" id="{{$todo->id . $tag->id}}" style="background-color: {{$tag->color}};">#{{ $tag->name }}</h1>
+                        <script>
+                            decideTextColor("{{$todo->id . $tag->id}}", "{{$tag->color}}");
+                        </script>
+                        </div>
+                        @endforeach
+                    </div>
+
                     </li>
                     <li class="text-cyan-600 text-xl">{{ $todo->category->name }}</li>
                     <li class="text-white text-lg">{{ $todo->description }}</li>
@@ -95,6 +120,7 @@
             </ul>
         </div>
     </div>
+    
 @endsection
 
 <!-- this causes the styling around the database button link to appear once active -->
