@@ -12,7 +12,6 @@
 {{$message}}
 @enderror
 <div class="flex justify-evenly mt-3 mx-auto text-white">
-    <p>Login page</p>
     <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
         <form action="../login" method="post" class="mx-auto flex-row">
             @csrf
@@ -30,7 +29,7 @@
             </div>
 
             <div class="form-group m-3">
-                <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Submit">
+                <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Login">
             </div>
         
         </form>

@@ -11,8 +11,15 @@ use App\Models\Tag;
 class TodoController extends Controller
 {
     public function index() {
+        $loggedInUser = auth()->user();
         $allCategories = Category::all();
-        $allTodos = Todo::with('category')->with('tags')->get();
+        if($loggedInUser ==! null) {
+            $allTodos = Todo::where('user_id', '=', $loggedInUser->id)->with('category')->with('tags')->get(); //This is complaining because of the ==! null but it legit doesn't work otherwise so don't change the if statement
+        }
+        else {
+            $allTodos = Todo::with('category')->with('tags')->get();
+        }
+        
      
         $finishedTodos = $allTodos->filter(function($todo, $key) {
             return $todo->checked == 1;
@@ -36,7 +43,7 @@ class TodoController extends Controller
         } catch (ValidationException $e) {
             return response()->json($e->errors());
         }
-
+        $loggedInUser = auth()->user();
         $todo = Todo::create($data);
         $todo->save();
 
@@ -85,6 +92,8 @@ class TodoController extends Controller
         }, $tagEntities);
         
         $newTodo->tags()->sync($tagIDS);
+        $newTodo->save();
+        $newTodo->user_id = $loggedInUser['id'];
         $newTodo->save();
 
         session()->flash('success', 'Todo with Tags created succesfully!');

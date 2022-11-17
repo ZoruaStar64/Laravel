@@ -1,11 +1,13 @@
 @extends('layouts/frontend')
 
 @section('content')
+<?php $loggedInUser = auth()->user(); ?>
 <script type="text/javascript" src="/tagColorChooser.js"></script>
 
 <div class="container rounded-lg bg-slate-700 p-4 mx-auto my-14 text-center">
     <div class="container rounded-lg bg-slate-600 py-2">
         <h2 class="text-white text-2xl">{{$todos->name}}</h2>
+        <p class="text-cyan-500 text-xl">Creator: <span class="text-white">{{ $loggedInUser->name }}</span></p>
         <h3 class="text-cyan-500 text-xl">Category : {{$todos->category->name}}</h3>
         <p class="text-lg mb-4">{{$todos->description}}</p>
         <div class="flex flex-row justify-center my-3 text-white">

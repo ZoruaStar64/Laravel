@@ -30,6 +30,11 @@ class UserController extends Controller
         return view('loginPage');
     }
 
+    public function resetPasswordPage()
+    {
+        return view('resetPassPage');
+    }
+
     /**
      * Register a newly created account in the users table.
      *

@@ -3,6 +3,7 @@
 
 <!-- this causes the tasks database page's body/main to appear -->
 @section('content')
+<?php $loggedInUser = auth()->user(); ?>
 <script type="text/javascript" src="/tagColorChooser.js"></script>
 
     <div class="bg-slate-700 mx-auto my-8 px-4 py-8 container">
@@ -28,6 +29,7 @@
                 <div class="container rounded-lg bg-slate-600 px-4 py-4 mx-auto my-4 w-11/12">
                     <li class="relative">
                         <a class="text-cyan-500 text-xl" href="/todos/{{$todo->id}}">{{ $todo->name }}</a>
+                        <p class="text-cyan-500 text-xl">Creator: <span class="text-white">{{ $loggedInUser->name }}</span></p>
  
                     <!-- This checks if a task has been checked and displays an image fitting to the result -->
                     @if($todo->checked == true)
@@ -76,6 +78,7 @@
                 <div class="container rounded-lg bg-slate-600 px-4 py-4 mx-auto my-4 w-11/12">
                     <li class="relative">
                         <a class="text-cyan-500 text-xl" href="/todos/{{$todo->id}}">{{ $todo->name }}</a>
+                        <p class="text-cyan-500 text-xl">Creator: <span class="text-white">{{ $loggedInUser->name }}</span></p>
                    <!-- This checks if a task has not been checked and displays an image fitting to the result -->
                     @if($todo->checked == false)
                     

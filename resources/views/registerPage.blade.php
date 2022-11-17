@@ -5,9 +5,16 @@
 @section('content')
 
     <div class="bg-slate-700 mx-auto my-8 px-4 py-8 container">
-
+@error('name')
+    {{$message}}
+@enderror
+@error('email')
+    {{$message}}
+@enderror
+@error('password')
+    {{$message}}
+@enderror
         <div class="flex justify-evenly mt-3 mx-auto text-white">
-            <p>Register page</p>
             <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
                 <form action="../register" method="post" class="mx-auto flex-row">
                     @csrf
@@ -31,7 +38,13 @@
                     </div>
 
                     <div class="form-group m-3">
-                        <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Submit">
+                    <label class="text-white text-xl" value="Confirm Password">Re-enter Password</label>
+                        <br>
+                        <input type="password" class="form-control mt-2 px-3 py-2 rounded-lg w-96 text-black" name="password_confirmation" placeholder="Re-enter Password" required>
+                    </div>
+
+                    <div class="form-group m-3">
+                        <input type="submit" class="rounded-full bg-slate-600 px-4 text-2xl text-white py-2" value="Register Account">
                     </div>
                 
                 </form>
