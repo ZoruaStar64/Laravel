@@ -11,7 +11,7 @@ class LoginTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_if_user_can_log_in()
     {
         $this->assertTrue(true);
     }

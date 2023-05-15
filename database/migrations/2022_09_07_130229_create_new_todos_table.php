@@ -62,6 +62,34 @@ return new class extends Migration
      */
     public function down()
     {
+        /*Schema::table('todos', function (Blueprint $table) {
+            $table->string('category');
+        });
 
+        $allTodosQuery = DB::table('todos')
+            ->select(DB::raw('DISTINCT `category_id`'))
+            ->get();
+
+        $array = [];
+        foreach($allTodosQuery as $categoryQuery) { // dd($categoryQuery->category);
+            $category = new Category(['name' => $categoryQuery->category]);
+            $category->save();
+            $array[] = $category;
+        };
+
+        Schema::table('todos', function (Blueprint $table) {
+            $table->after('id', function ($table) {
+                $table->foreignId('categories_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            });
+        });
+
+        // Update Query loop door category array elke opgeslagen category update op database
+        // elke todo waar de oude bestaat koppel de id die erbij hoort
+
+        foreach($array as $category) {
+            DB::table('todos')
+            ->where('category', $category->name)
+            ->update(['categories_id' => $category->id]);
+        }*/
     }
 };
