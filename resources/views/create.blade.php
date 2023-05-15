@@ -12,12 +12,13 @@ $colorOptions = '
 <option>#9933ff</option>
 <option>#33cc33</option>
 ';
+$userId = auth()->user()->id;
 ?>
 
 <div class="container flex rounded-lg bg-slate-700 p-4 mx-auto my-14">
     <form action="store-data" method="post" class="mx-auto flex-row">
         @csrf
-        
+        <input type="hidden" name="user_id" value="{{$userId}}">
         <div class="form-group m-3">
         <label class="text-white text-xl" for="name">Task Name</label>
             <br>

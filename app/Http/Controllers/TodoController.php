@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\StoreTrustRequest;
 use Illuminate\Validation\ValidationException;
 use App\Models\Todo;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\User;
 
 class TodoController extends Controller
 {
@@ -20,7 +22,6 @@ class TodoController extends Controller
             $allTodos = Todo::with('category')->with('tags')->get();
         }
         
-     
         $finishedTodos = $allTodos->filter(function($todo, $key) {
             return $todo->checked == 1;
         });
@@ -104,6 +105,23 @@ class TodoController extends Controller
         return view('details',[
             'todos' => $todo,
         ]);
+    }
+
+    public function trustPage(Todo $todo) {
+        $otherUsers = User::whereNot(function ($query) {
+            $loggedInUser = auth()->user();
+            $query->where('id', '=', $loggedInUser->id);
+        })->get();
+        return view('trustUser')->with('currentTodo', $todo)->with('otherUsers', $otherUsers);
+    }
+
+    public function trustUsers(StoreTrustRequest $request, $todoID) {
+        try {
+            $data = $request->validated();
+         } catch (ValidationException $e) {
+             return response()->json($e->errors());
+         }
+         dd($data, $todoID);
     }
 
     public function edit($todoID) { 

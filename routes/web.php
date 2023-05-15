@@ -37,6 +37,8 @@ Route::prefix('todos')->group(function () {
     Route::post('store-data', [TodoController::class, 'store']);
     Route::delete('{todo}', [TodoController::class, 'delete']);
     Route::get('{todo}', [TodoController::class, 'details']);
+    Route::get('{todo}/trust', [TodoController::class, 'trustPage']);
+    Route::post('{todo}/trust-users', [TodoController::class, 'trustUsers']);
     Route::get('{todo}/edit', [TodoController::class, 'edit']);
     Route::post('{todo}', [TodoController::class, 'update']);
     Route::post('check/{todo}', [TodoController::class, 'check']);

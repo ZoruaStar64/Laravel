@@ -21,6 +21,7 @@
         </div>
         <div class="flex flex-row justify-center my-2">
             <a href="/todos/{{$todos->id}}/edit"><i class="fa fa-edit text-green-600 text-2xl mr-6"></i></a>
+            <a href="/todos/{{$todos->id}}/trust" class="transition duration-500 hover:border-red-900 hover:bg-slate-700 border-2 rounded-lg border-red-700 mr-10 bg-slate-600 px-2 py-1 text-white">Trust Users</a>
             <form action="/todos/{{$todos->id}}" method="post">
                 @csrf
                 {{ method_field('delete') }}

@@ -46,6 +46,7 @@ protected function prepareForValidation()
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:30'],
+            'user_id' => ['required', 'numeric'],
             'categories_id' => ['required', "numeric"],
             'description' => ['required', 'string'],
             'tags.*.name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z][a-zA-Z\d\-]+[a-zA-Z\d]$/'],
